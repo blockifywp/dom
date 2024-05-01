@@ -4,14 +4,12 @@ declare( strict_types=1 );
 
 namespace Blockify\Dom;
 
-use function _wp_to_kebab_case;
 use function array_key_last;
 use function array_merge;
 use function count;
 use function explode;
 use function file_exists;
 use function get_template_directory;
-use function implode;
 use function in_array;
 use function is_array;
 use function is_null;
@@ -59,11 +57,15 @@ class CSS {
 	 *
 	 * @since 0.9.10
 	 *
-	 * @param string $custom_property Custom property value to format.
+	 * @param ?string $custom_property Custom property value to format.
 	 *
 	 * @return string
 	 */
-	public static function format_custom_property( string $custom_property ): string {
+	public static function format_custom_property( ?string $custom_property ): string {
+		if ( ! $custom_property ) {
+			return '';
+		}
+
 		if ( str_contains( $custom_property, 'var:' ) ) {
 			return str_replace(
 				[ 'var:', '|', ],
@@ -106,14 +108,14 @@ class CSS {
 		);
 
 		$system_colors = [
-            'current',
-            'currentcolor',
-            'currentColor',
-            'inherit',
-            'initial',
-            'transparent',
-            'unset',
-        ];
+			'current',
+			'currentcolor',
+			'currentColor',
+			'inherit',
+			'initial',
+			'transparent',
+			'unset',
+		];
 
 		if ( in_array( $custom_property, $system_colors, true ) ) {
 			if ( $custom_property === 'current' ) {
